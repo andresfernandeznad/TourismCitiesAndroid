@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "634845537853",
+    "firebase_url": "https://tourism-cities.firebaseio.com",
+    "project_id": "tourism-cities",
+    "storage_bucket": "tourism-cities.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634845537853:android:3acef8aa4914c98e",
+        "android_client_info": {
+          "package_name": "com.example.andres.tourismcities"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634845537853-lejcdujqktcdqa1bhcp4r3ju7hhjvj3h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.andres.tourismcities",
+            "certificate_hash": "90980c2c4df35840d7cc41a8789c45fa5402aed8"
+          }
+        },
+        {
+          "client_id": "634845537853-ngkn393bhskqne2mvpgit1lte28sk10n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9Lg7IrDLyI5dX53qrDungaTi-l-ByRPw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634845537853-ngkn393bhskqne2mvpgit1lte28sk10n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

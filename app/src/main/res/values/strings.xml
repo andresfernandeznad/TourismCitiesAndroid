@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Tourism Cities</string>
+
+    <string name="login_label_usuario">Nombre de usuario</string>
+    <string name="login_label_password">Contraseña</string>
+
+    <string name="login_button_login">ENTRAR</string>
+    <string name="login_button_register">REGISTRAR</string>
+
+    <string name="login_error_login_vacia">Nombre o contraseña vacía</string>
+    <string name="login_error_login">Nombre de usuario o contraseña errónea</string>
+
+    <!--Register activity-->
+    <string name="register_label_nombre">Nombre</string>
+    <string name="register_label_apellidos">Apellidos</string>
+    <string name="register_label_email">Correo electrónico</string>
+    <string name="register_label_telefono">Teléfono</string>
+    <string name="register_label_boton">Registro</string>
+    <string name="register_label_confcon">Confirmación</string>
+</resources>
