@@ -5,7 +5,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -51,13 +54,14 @@ public class AdaptadorLugar extends RecyclerView.Adapter<AdaptadorLugar.LugarHol
         return this.lugares.size();
     }
 
-    public class LugarHolder extends RecyclerView.ViewHolder {
+    public class LugarHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
         public TextView textView;
         public ImageView imageView;
         public Lugar lugar;
 
         public LugarHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnCreateContextMenuListener(this);
             textView = itemView.findViewById(R.id.nombreLugar);
             imageView = itemView.findViewById(R.id.imagenLugar);
         }
@@ -74,6 +78,17 @@ public class AdaptadorLugar extends RecyclerView.Adapter<AdaptadorLugar.LugarHol
                     listener.onItemClick(lugar, getAdapterPosition());
                 }
             });
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            MenuInflater menuInflater = ((PostLogin) contexto).getMenuInflater();
+            menuInflater.inflate(R.menu.menu_lugar_anyadirfav, contextMenu);
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            return false;
         }
     }
 

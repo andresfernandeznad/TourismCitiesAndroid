@@ -41,13 +41,10 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final String DUMMY_USER = "Tony";
-    private final String DUMMY_PASSWORD = "IronMan";
 
     private static List<Lugar> lugares = new ArrayList<Lugar>();
 
     Button btnLogin, btnRegister;
-    SignInButton botonGoogle;
     EditText nomUsu, contra;
 
     private RequestQueue queue;
@@ -57,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        fillFirebaseDB();
+        //fillFirebaseDB();
 
         leerFromFirebase();
 
@@ -66,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.registerButton);
         nomUsu = findViewById(R.id.loginUsuario);
         contra = findViewById(R.id.loginPassword);
-        botonGoogle = findViewById(R.id.googleSignInButton);
 
         nomUsu.setText(getIntent().getStringExtra("email"));
 
@@ -93,16 +89,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 intent.putExtra("usu", nomUsu.getText().toString());
-                startActivity(intent);
-            }
-        });
-
-        botonGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PostLogin.class);
-                intent.putExtra("lugares", (Serializable) lugares);
-                intent.putExtra("botonGoogle", true);
                 startActivity(intent);
             }
         });
@@ -202,7 +188,6 @@ public class LoginActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     String cadenaJSON = dataSnapshot1.getValue().toString();
 
-                    //todo hacer la conversion del StringJSON a objeto lugar y meterlo en la lista
                     JsonObject jsonObject = parser.parse(cadenaJSON).getAsJsonObject();
                     String nombre = jsonObject.get("nombre").toString().replaceAll("^\"|\"$", "");
                     double latitud = Double.parseDouble(jsonObject.get("latitud").toString());
