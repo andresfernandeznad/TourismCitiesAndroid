@@ -56,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
 
         //fillFirebaseDB();
 
+        //Para evitar lugares repetidos
+        lugares.clear();
+
         leerFromFirebase();
 
         queue = Volley.newRequestQueue(this);
