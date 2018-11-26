@@ -82,8 +82,9 @@ public class AdaptadorLugar extends RecyclerView.Adapter<AdaptadorLugar.LugarHol
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            MenuInflater menuInflater = ((PostLogin) contexto).getMenuInflater();
-            menuInflater.inflate(R.menu.menu_lugar_anyadirfav, contextMenu);
+            contextMenu.add(getAdapterPosition(), 1, 0, "Añadir a favoritos");
+            /*MenuInflater menuInflater = ((PostLogin) contexto).getMenuInflater();
+            menuInflater.inflate(R.menu.menu_lugar_anyadirfav, contextMenu);*/
         }
 
         @Override

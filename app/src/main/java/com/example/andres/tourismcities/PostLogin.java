@@ -84,7 +84,7 @@ public class PostLogin extends AppCompatActivity {
 
         crearNuevosFavsEnFirebase(usuario.getIdUsuario());
 
-        if (usuario != null) downloadFavsFromFirebase(usuario.getIdUsuario());
+        //if (usuario != null) downloadFavsFromFirebase(usuario.getIdUsuario());
 
         registerForContextMenu(recyclerView);
     }
@@ -104,10 +104,13 @@ public class PostLogin extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Log.d("ad", "onContextItemSelected: ");
         switch (item.getItemId()) {
-            case R.id.anyadirAFavs:
+            case 1: //Es el id del item del menu que hemos puesto en el adaptador, lo ponemos a mano no cogiendolo del layout
                 //todo Añadir el lugar de este elemento del recycler view a mi lista de lugares favoritos.
-                Toast.makeText(getApplicationContext(), "Se añade a mi lista de favoritos este lugar", Toast.LENGTH_SHORT).show();
+                Lugar seAnyade = lugares.get(item.getGroupId());
+                Toast.makeText(getApplicationContext(), "Se añade a mi lista de favoritos " + seAnyade.getNombre(), Toast.LENGTH_SHORT).show();
+
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -127,6 +130,8 @@ public class PostLogin extends AppCompatActivity {
             case R.id.mislugaresmenu:
                 //todo Que se abra actividad en la cual se vean sólo mis lugares favoritos
                 Toast.makeText(getApplicationContext(), "Se abre mis lugares", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent();
                 break;
             case R.id.perfilmenu:
                 //todo Que se abre actividad en la que se pueda ver mi perfil y configuración sobre el mismo
@@ -194,6 +199,10 @@ public class PostLogin extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("favoritos/" + idUsuario);
 
-        myRef.setValue(new Favoritos(idUsuario));
+        myRef.setValue(new Favoritos(idUsuario, lugares));
+    }
+
+    protected void addFavoritos() {
+
     }
 }
