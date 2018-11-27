@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Favoritos implements Serializable {
@@ -14,7 +15,7 @@ public class Favoritos implements Serializable {
 
     @Expose
     @SerializedName("lugaresFavoritos")
-    private List<Lugar> lugaresFavoritos;
+    private List<Lugar> lugaresFavoritos = new ArrayList<>();
 
     public Favoritos(String id) {
         this.id = id;

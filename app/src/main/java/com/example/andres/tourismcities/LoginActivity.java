@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //fillFirebaseDB();
+        fillFirebaseDB();
 
         //Para evitar lugares repetidos
         lugares.clear();
@@ -167,13 +167,13 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("lugar");
 
-        myRef.child("malaga").setValue(new Lugar("Málaga", 36.7182015,-4.519307, "malaga.jpg", "descripcion.sd"));
-        myRef.child("madrid").setValue(new Lugar("Madrid", 40.4378698,-3.8196207, "madrid.jpg", "descripci.on"));
-        myRef.child("barcelona").setValue(new Lugar("Barcelona", 41.3947688,2.0787279, "barcelona.jpg", "descripcion.dfgdg"));
-        myRef.child("sevilla").setValue(new Lugar("Sevilla", 37.3753501,-6.0250983, "sevilla.jpg", "descripc.ion"));
-        myRef.child("cadiz").setValue(new Lugar("Cadiz", 36.5163813,-6.3174866, "cadiz.jpg", "descripc.ion"));
-        myRef.child("valencia").setValue(new Lugar("Valencia", 39.4077013,-0.5015956, "valencia.png", "descrip.cion"));
-        myRef.child("andorra").setValue(new Lugar("Andorra", 42.5421846,1.4575882, "andorra.jpg", "descri.pcion"));
+        myRef.child("malaga").setValue(new Lugar("Málaga", 36.7182015,-4.519307, "malaga.jpg", "descripcion"));
+        myRef.child("madrid").setValue(new Lugar("Madrid", 40.4378698,-3.8196207, "madrid.jpg", "descripcion"));
+        myRef.child("barcelona").setValue(new Lugar("Barcelona", 41.3947688,2.0787279, "barcelona.jpg", "descripcion"));
+        myRef.child("sevilla").setValue(new Lugar("Sevilla", 37.3753501,-6.0250983, "sevilla.jpg", "descripcion"));
+        myRef.child("cadiz").setValue(new Lugar("Cadiz", 36.5163813,-6.3174866, "cadiz.jpg", "descripcion"));
+        myRef.child("valencia").setValue(new Lugar("Valencia", 39.4077013,-0.5015956, "valencia.png", "descripcion"));
+        myRef.child("andorra").setValue(new Lugar("Andorra", 42.5421846,1.4575882, "andorra.jpg", "descripcion"));
 
 
     }
@@ -197,7 +197,6 @@ public class LoginActivity extends AppCompatActivity {
                     double longitud = Double.parseDouble(jsonObject.get("longitud").toString());
                     String imagen = jsonObject.get("imagen").toString().replaceAll("^\"|\"$", "");
                     String descripcion = jsonObject.get("descripcion").toString().replaceAll("^\"|\"$", "");
-                    descripcion = descripcion.replace(".", " ");
                     Lugar lugar = new Lugar(nombre, latitud, longitud, imagen, descripcion);
                     lugares.add(lugar);
                 }
