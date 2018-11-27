@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        fillFirebaseDB();
+        //fillFirebaseDB();
 
         //Para evitar lugares repetidos
         lugares.clear();
@@ -200,9 +200,6 @@ public class LoginActivity extends AppCompatActivity {
                     Lugar lugar = new Lugar(nombre, latitud, longitud, imagen, descripcion);
                     lugares.add(lugar);
                 }
-
-                Log.i("TOURISMCITIES:", "Insertados: " + lugares.size()) ;
-                Toast.makeText(getApplicationContext(), "AÑADIDOS LUGARES", Toast.LENGTH_SHORT).show();
             }
 
             @Override

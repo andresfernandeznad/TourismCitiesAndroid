@@ -105,7 +105,6 @@ public class PostLogin extends AppCompatActivity {
         Log.d("ad", "onContextItemSelected: ");
         switch (item.getItemId()) {
             case 1: //Es el id del item del menu que hemos puesto en el adaptador, lo ponemos a mano no cogiendolo del layout
-                //todo Añadir el lugar de este elemento del recycler view a mi lista de lugares favoritos y a Firebase
                 Lugar seAnyade = lugares.get(item.getGroupId());
                 addFavoritos(seAnyade);
                 Toast.makeText(getApplicationContext(), "Se añade a mi lista de favoritos " + seAnyade.getNombre(), Toast.LENGTH_SHORT).show();
@@ -128,8 +127,6 @@ public class PostLogin extends AppCompatActivity {
                 break;
 
             case R.id.mislugaresmenu:
-                //todo Que se abra actividad en la cual se vean sólo mis lugares favoritos
-
                 Intent intent = new Intent(getApplicationContext(), FavsActivity.class);
                 intent.putExtra("lugaresFavoritos", lugaresFavoritos);
 
@@ -160,7 +157,6 @@ public class PostLogin extends AppCompatActivity {
                 if (dataSnapshot.getValue() == null) {
                     crearNuevosFavsEnFirebase(idUsuario);
                 } else {
-                    //todo Recoger los favoritos y guardarlos aquí en la app
                     lugaresFavoritos = new Favoritos(idUsuario);
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         if (!snapshot.getKey().equals("id")) {
@@ -204,7 +200,9 @@ public class PostLogin extends AppCompatActivity {
      * @param seAnyade
      */
     protected void addFavoritos(Lugar seAnyade) {
-        
         lugaresFavoritos.addLugar(seAnyade);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario());
+        ref.setValue(lugaresFavoritos);
     }
 }

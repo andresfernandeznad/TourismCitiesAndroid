@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class LugarActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -53,6 +54,7 @@ public class LugarActivity extends AppCompatActivity implements OnMapReadyCallba
             LatLng deLugar = new LatLng(lugar.getLatitud(), lugar.getLongitud());
             int zoom = 8;
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(deLugar, zoom));
+            googleMap.addMarker(new MarkerOptions().position(deLugar).title(lugar.getNombre()).draggable(true));
             map = googleMap;
         }
     }
