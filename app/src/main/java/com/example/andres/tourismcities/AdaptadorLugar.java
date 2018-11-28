@@ -82,6 +82,10 @@ public class AdaptadorLugar extends RecyclerView.Adapter<AdaptadorLugar.LugarHol
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            /**
+             * todo Cambiar el menú contextual por el método de Antonio
+             * para así que utilizando el mismo adaptador pueda tener distintos menús contextuales
+             */
             contextMenu.add(getAdapterPosition(), 1, 0, "Añadir a favoritos");
             /*MenuInflater menuInflater = ((PostLogin) contexto).getMenuInflater();
             menuInflater.inflate(R.menu.menu_lugar_anyadirfav, contextMenu);*/
