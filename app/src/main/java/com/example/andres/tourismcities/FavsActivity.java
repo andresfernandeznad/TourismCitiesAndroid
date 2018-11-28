@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.andres.tourismcities.modelos.Favoritos;
 import com.example.andres.tourismcities.modelos.Lugar;
+import com.example.andres.tourismcities.modelos.Usuario;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +23,12 @@ public class FavsActivity extends AppCompatActivity {
 
     private static Favoritos lugaresFavoritos = null;
     RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private AdaptadorLugar adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private List<Lugar> lugares = new ArrayList<Lugar>();
+
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,8 @@ public class FavsActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         lugaresFavoritos = (Favoritos) intent.getSerializableExtra("lugaresFavoritos");
+
+        usuario = (Usuario) intent.getSerializableExtra("usuario");
 
         lugares = lugaresFavoritos.getLugaresFavoritos();
 
@@ -52,6 +60,8 @@ public class FavsActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(adapter);
+
+        registerForContextMenu(recyclerView);
     }
 
     @Override
@@ -63,5 +73,23 @@ public class FavsActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_lugar_borrarfav, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Lugar lugar = lugaresFavoritos.getLugaresFavoritos().get(adapter.getPosicion());
+        borrarFromFirebase(lugar.getPosicionFirebaseFav(), lugar);
+        return super.onContextItemSelected(item);
+    }
+
+    private void borrarFromFirebase(int posicion, Lugar lugar) {
+        Toast.makeText(getApplicationContext(), "Se borra " + lugar.getNombre(), Toast.LENGTH_SHORT).show();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario() + "/lugaresFavoritos/" + posicion);
+        lugaresFavoritos.getLugaresFavoritos().remove(adapter.getPosicion());
+        ref.removeValue();
+        adapter.notifyItemRemoved(adapter.getPosicion());
     }
 }

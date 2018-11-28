@@ -34,7 +34,7 @@ import java.util.List;
 public class PostLogin extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private AdaptadorLugar adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private static List<Lugar> lugares = new ArrayList<Lugar>();
@@ -100,21 +100,18 @@ public class PostLogin extends AppCompatActivity {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_lugar_anyadirfav, menu);
+
+    }
+
+    @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Log.d("ad", "onContextItemSelected: ");
-        switch (item.getItemId()) {
-            case 1: //Es el id del item del menu que hemos puesto en el adaptador, lo ponemos a mano no cogiendolo del layout
-                Lugar seAnyade = lugares.get(item.getGroupId());
-                addFavoritos(seAnyade);
-                Toast.makeText(getApplicationContext(), "Se añade a mi lista de favoritos " + seAnyade.getNombre(), Toast.LENGTH_SHORT).show();
-
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-
-        }
-        return true;
+        Lugar seAnyade = lugares.get(adapter.getPosicion());
+        addFavoritos(seAnyade);
+        //Toast.makeText(this, "Se añade a favoritos " + lugaresFavoritos.getLugaresFavoritos().get(adapter.getPosicion() - 1).getNombre(), Toast.LENGTH_LONG).show() ;
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -129,7 +126,7 @@ public class PostLogin extends AppCompatActivity {
             case R.id.mislugaresmenu:
                 Intent intent = new Intent(getApplicationContext(), FavsActivity.class);
                 intent.putExtra("lugaresFavoritos", lugaresFavoritos);
-
+                intent.putExtra("usuario", usuario);
                 startActivity(intent);
                 break;
             case R.id.perfilmenu:
@@ -167,10 +164,12 @@ public class PostLogin extends AppCompatActivity {
                                 double latitud = Double.parseDouble(jsonObject.get("latitud").toString());
                                 double longitud = Double.parseDouble(jsonObject.get("longitud").toString());
                                 String imagen = jsonObject.get("imagen").toString().replaceAll("^\"|\"$", "");
+                                int lugarFirebaseFav = Integer.parseInt(jsonObject.get("posicionFirebaseFav").toString());
                                 //Error de que esta malformado
                                 /*String descripcion = jsonObject.get("descripcion").toString().replaceAll("^\"|\"$", "");
                                 descripcion = descripcion.replace(".", " ");*/
                                 Lugar lugar = new Lugar(nombre, latitud, longitud, imagen, "descripcion");
+                                lugar.setPosicionFirebaseFav(lugarFirebaseFav);
                                 lugaresFavoritos.addLugar(lugar);
                             }
                         }
@@ -200,6 +199,8 @@ public class PostLogin extends AppCompatActivity {
      * @param seAnyade
      */
     protected void addFavoritos(Lugar seAnyade) {
+        Toast.makeText(getApplicationContext(), "Se añade a favoritos " + seAnyade.getNombre(), Toast.LENGTH_SHORT).show();
+        seAnyade.setPosicionFirebaseFav(lugaresFavoritos.getLugaresFavoritos().size());
         lugaresFavoritos.addLugar(seAnyade);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario());

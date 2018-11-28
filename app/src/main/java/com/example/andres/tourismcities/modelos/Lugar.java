@@ -28,6 +28,10 @@ public class Lugar implements Serializable {
     @SerializedName("descripcion")
     private String descripcion;
 
+    @Expose
+    @SerializedName("posicionFirebaseFav")
+    private int posicionFirebaseFav;
+
     public Lugar(String nombre, double latitud, double longitud, String imagen, String descripcion) {
         this.nombre = nombre;
         this.latitud = latitud;
@@ -74,5 +78,13 @@ public class Lugar implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public int getPosicionFirebaseFav() {
+        return posicionFirebaseFav;
+    }
+
+    public void setPosicionFirebaseFav(int posicionFirebaseFav) {
+        this.posicionFirebaseFav = posicionFirebaseFav;
     }
 }
