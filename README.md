@@ -25,7 +25,7 @@ con su nombre, foto y ubicación en el mapa de google desde el cual dandole al m
 a la aplicación de google maps para verlo ahí o ver como llegar al sitio.
 
 
-<img src="readmeIMG/infoDeUnLugar.png" width="250px">
+<img src="readmeIMG/InfoDeUnLugar.png" width="250px">
 
 
 Volviendo al listado principal de lugares en él arriba a la derecha podremos hacer distintas cosas en el menú
