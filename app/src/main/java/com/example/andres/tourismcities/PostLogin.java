@@ -131,7 +131,10 @@ public class PostLogin extends AppCompatActivity {
                 break;
             case R.id.perfilmenu:
                 //todo Que se abre actividad en la que se pueda ver mi perfil y configuración sobre el mismo
-                Toast.makeText(getApplicationContext(), "Se abre mi perfil", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra("usuario", usuario);
+                //Toast.makeText(getApplicationContext(), "Se abre mi perfil", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 break;
 
             default:

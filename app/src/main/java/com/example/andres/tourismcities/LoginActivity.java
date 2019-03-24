@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //fillFirebaseDB();
+        fillFirebaseDB();
 
         //Para evitar lugares repetidos
         lugares.clear();
@@ -75,8 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 String usr = nomUsu.getText().toString().trim();
                 String psw = contra.getText().toString().trim();
 
-                Log.d("FLIXNETLOGIN", "com.example.andres.flixnet.modelos.Usuario: " + usr + ", Pass: "
-                        + psw);
+
 
                 if (usr.isEmpty() || psw.isEmpty()) {
                     Snackbar.make(view, R.string.login_error_login_vacia, Snackbar.LENGTH_LONG).show();
@@ -93,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 intent.putExtra("usu", nomUsu.getText().toString());
                 startActivity(intent);
+                /*Intent intent = new Intent(getApplicationContext(), SliderLoginActivity.class);
+                startActivity(intent);*/
             }
         });
     }

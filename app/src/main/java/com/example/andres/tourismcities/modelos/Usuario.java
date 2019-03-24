@@ -77,4 +77,8 @@ public class Usuario implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getNombreCompleto() {
+        return this.getNombre() + " " + this.getApellidos();
+    }
 }
