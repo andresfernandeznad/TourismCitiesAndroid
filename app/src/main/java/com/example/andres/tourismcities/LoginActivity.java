@@ -23,6 +23,7 @@ import com.example.andres.tourismcities.modelos.Usuario;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +36,7 @@ import com.google.gson.JsonParser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +51,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private RequestQueue queue;
 
+    private FirebaseAnalytics firebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FirebaseAnalytics.Param.START_DATE, new Date());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
 
         fillFirebaseDB();
 
@@ -150,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                                Toast.makeText(LoginActivity.this, "El usuario o la contraseña son erróneos", Toast.LENGTH_LONG).show();
                                             }
                                         });
                             }

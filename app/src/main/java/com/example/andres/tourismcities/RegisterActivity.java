@@ -130,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 //Creamos nuestro objeto usuario con los datos proporcionados a través del formulario
                                 Usuario miUsuario = new Usuario(uid, nombre.getText().toString(), apellidos.getText().toString(),
-                                        email.getText().toString());
+                                        email.getText().toString(), null);
 
                                 //Guardamos la información en la BBDD de Firebase asociados al UID.
                                 ref.child(uid).setValue(miUsuario);

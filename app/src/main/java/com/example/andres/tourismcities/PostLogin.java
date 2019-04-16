@@ -1,7 +1,11 @@
 package com.example.andres.tourismcities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,16 +23,32 @@ import android.widget.Toast;
 import com.example.andres.tourismcities.modelos.Favoritos;
 import com.example.andres.tourismcities.modelos.Lugar;
 import com.example.andres.tourismcities.modelos.Usuario;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PostLogin extends AppCompatActivity {
@@ -36,6 +56,8 @@ public class PostLogin extends AppCompatActivity {
     RecyclerView recyclerView;
     private AdaptadorLugar adapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private FloatingActionButton floatingActionButton;
 
     private static List<Lugar> lugares = new ArrayList<Lugar>();
 
@@ -52,7 +74,7 @@ public class PostLogin extends AppCompatActivity {
 
         final Intent intent = getIntent();
 
-
+        pedirPermisos();
         usuario = (Usuario) intent.getSerializableExtra("usuario");
 
 
@@ -65,6 +87,18 @@ public class PostLogin extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerLugares);
 
         layoutManager = new LinearLayoutManager(this);
+        floatingActionButton = findViewById(R.id.anyadirFoto);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, 1);
+                }
+            }
+        });
 
         recyclerView.setLayoutManager(layoutManager);
         adapter = new AdaptadorLugar(R.layout.lugar, this, lugares, new AdaptadorLugar.OnItemClickListener() {
@@ -88,8 +122,76 @@ public class PostLogin extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date());
+
+            // Creamos una referencia a la carpeta y el nombre de la imagen donde se guardara
+            //todo Añadir la url de los lugares ponerle el nombre sacándolo de la ubicación de alguna forma
+            StorageReference mountainImagesRef = storage.getReference().child("lugar/"+timeStamp+".jpg");
+//Pasamos la imagen a un array de byte
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] datas = baos.toByteArray();
+
+// Empezamos con la subida a Firebase
+            UploadTask uploadTask = mountainImagesRef.putBytes(datas);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getBaseContext(),"Hubo un error",Toast.LENGTH_LONG);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getBaseContext(),"Subida con exito",Toast.LENGTH_LONG);
+
+                }
+            });
+        }
+    }
+
+    private void pedirPermisos(){
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            //Toast.makeText(getApplicationContext(), "Todos los permisos garantizados.", Toast.LENGTH_SHORT).show();
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).
+                withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Toast.makeText(getApplicationContext(), "Some Error! ", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
+
+    @Override
     public void onBackPressed() {
         lugares.clear();
+        FirebaseAuth.getInstance().signOut();
         super.onBackPressed();
     }
 
@@ -120,6 +222,7 @@ public class PostLogin extends AppCompatActivity {
 
             case R.id.cerrarsesionmenu:
                 lugaresFavoritos = null;
+                FirebaseAuth.getInstance().signOut();
                 super.finish();
                 break;
 
@@ -130,7 +233,7 @@ public class PostLogin extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.perfilmenu:
-                //todo Que se abre actividad en la que se pueda ver mi perfil y configuración sobre el mismo
+                // todo Que se abre actividad en la que se pueda ver mi perfil y configuración sobre el mismo
                 intent = new Intent(getApplicationContext(), ProfileActivity.class);
                 intent.putExtra("usuario", usuario);
                 //Toast.makeText(getApplicationContext(), "Se abre mi perfil", Toast.LENGTH_SHORT).show();

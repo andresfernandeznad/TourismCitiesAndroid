@@ -1,6 +1,7 @@
 package com.example.andres.tourismcities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +21,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.andres.tourismcities.modelos.Usuario;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -43,14 +54,21 @@ public class ProfileActivity extends AppCompatActivity {
     private final int GALLERY = 1, CAMERA = 2;
     private Button btn;
 
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Intent intent = getIntent();
-        pedirPermisos();
+        storageReference = FirebaseStorage.getInstance().getReference();
         usuario = (Usuario) intent.getSerializableExtra("usuario");
+        try {
+            downloadProfilePhoto();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         textView = findViewById(R.id.nombreApellidoUsuario);
         imageView = findViewById(R.id.imagenPerfil);
         btn = findViewById(R.id.btn);
@@ -150,6 +168,7 @@ public class ProfileActivity extends AppCompatActivity {
             File f = new File(wallpaperDirectory, Calendar.getInstance()
                     .getTimeInMillis() + ".jpg");
             f.createNewFile();
+            subirFotosAlStorage(f);
             FileOutputStream fo = new FileOutputStream(f);
             fo.write(bytes.toByteArray());
             MediaScannerConnection.scanFile(this,
@@ -165,39 +184,51 @@ public class ProfileActivity extends AppCompatActivity {
         return "";
     }
 
-    private void pedirPermisos(){
-        Dexter.withActivity(this)
-                .withPermissions(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        // check if all permissions are granted
-                        if (report.areAllPermissionsGranted()) {
-                            Toast.makeText(getApplicationContext(), "Todos los permisos garantizados.", Toast.LENGTH_SHORT).show();
-                        }
-                        // check for permanent denial of any permission
-                        if (report.isAnyPermissionPermanentlyDenied()) {
+    private void subirFotosAlStorage(File file) {
+        Uri fileUrl = Uri.fromFile(file);
+        StorageReference riversRef = storageReference.child("UsersPhotos/" + usuario.getEmail());
 
-                        }
-                    }
+        riversRef.putFile(fileUrl)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Log.e("DESCARGADA", downloadUrl.toString());
+                        usuario.setUrlProfilePhoto(downloadUrl);
+                        FirebaseDatabase db = FirebaseDatabase.getInstance() ;
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).
-                withErrorListener(new PermissionRequestErrorListener() {
-                    @Override
-                    public void onError(DexterError error) {
-                        Toast.makeText(getApplicationContext(), "Some Error! ", Toast.LENGTH_SHORT).show();
+                        // Creamos una referencia al documento USUARIOS
+                        DatabaseReference ref = db.getReference("usuario") ;
+                        ref.child(usuario.getIdUsuario() + "/photoURL").setValue(downloadUrl);
                     }
                 })
-                .onSameThread()
-                .check();
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+
+                    }
+                });
     }
+
+    private void downloadProfilePhoto() throws IOException {
+        StorageReference riversRef = storageReference.child("UsersPhotos/" + usuario.getEmail() + ".jpg");
+        File localFile = File.createTempFile("images", "jpg");
+        riversRef.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle failed download
+                // ...
+            }
+        });
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
