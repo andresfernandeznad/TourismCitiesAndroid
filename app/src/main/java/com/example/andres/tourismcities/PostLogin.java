@@ -124,7 +124,10 @@ public class PostLogin extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK) {
+            Intent intent = new Intent(getApplicationContext(), NuevoLugar.class);
             Bundle extras = data.getExtras();
+            intent.putExtra("lugarBundle", extras);
+            startActivity(intent);
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             FirebaseStorage storage = FirebaseStorage.getInstance();
             String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date());
@@ -159,7 +162,9 @@ public class PostLogin extends AppCompatActivity {
                 .withPermissions(
                         Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -311,5 +316,15 @@ public class PostLogin extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario());
         ref.setValue(lugaresFavoritos);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
