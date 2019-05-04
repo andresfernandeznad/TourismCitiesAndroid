@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.andres.tourismcities.modelos.Lugar;
 
 import java.util.List;
@@ -83,8 +84,8 @@ public class AdaptadorLugar extends RecyclerView.Adapter<AdaptadorLugar.LugarHol
             textView.setText(lugar.getNombre());
 
             String nombreImg = lugar.getImagen().substring(0, lugar.getImagen().length() - 4);
-            imageView.setImageResource(contexto.getResources().getIdentifier("@drawable/" + nombreImg, null, contexto.getPackageName()));
-
+            //imageView.setImageResource(contexto.getResources().getIdentifier("@drawable/" + nombreImg, null, contexto.getPackageName()));
+            Glide.with(contexto).load(lugar.getImagen()).into(imageView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

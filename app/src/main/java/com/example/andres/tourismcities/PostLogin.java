@@ -49,6 +49,7 @@ import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class PostLogin extends AppCompatActivity {
@@ -61,7 +62,7 @@ public class PostLogin extends AppCompatActivity {
 
     private static List<Lugar> lugares = new ArrayList<Lugar>();
 
-    private Usuario usuario = null;
+    protected static Usuario usuario = null;
 
     private static Favoritos lugaresFavoritos = null;
 
@@ -77,10 +78,11 @@ public class PostLogin extends AppCompatActivity {
         pedirPermisos();
         usuario = (Usuario) intent.getSerializableExtra("usuario");
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        // ProfileActivity.getDownloadUrlUser(storage.getReference().child("users/"+usuario.getIdUsuario()));
+
 
         lugares = (List<Lugar>) intent.getSerializableExtra("lugares");
-
-        //googleApiClient = new GoogleApiClient.Builder(this).addApi(Places.GEO_DATA_API).build();
 
         getSupportActionBar().setSubtitle("Todos los lugares");
 
@@ -269,18 +271,15 @@ public class PostLogin extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         if (!snapshot.getKey().equals("id")) {
                             for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                String lugarJSON = snapshot1.getValue().toString();
-                                JsonObject jsonObject = parser.parse(lugarJSON).getAsJsonObject();
-                                String nombre = jsonObject.get("nombre").toString().replaceAll("^\"|\"$", "");
-                                double latitud = Double.parseDouble(jsonObject.get("latitud").toString());
-                                double longitud = Double.parseDouble(jsonObject.get("longitud").toString());
-                                String imagen = jsonObject.get("imagen").toString().replaceAll("^\"|\"$", "");
-                                int lugarFirebaseFav = Integer.parseInt(jsonObject.get("posicionFirebaseFav").toString());
-                                //Error de que esta malformado
-                                /*String descripcion = jsonObject.get("descripcion").toString().replaceAll("^\"|\"$", "");
-                                descripcion = descripcion.replace(".", " ");*/
-                                Lugar lugar = new Lugar(nombre, latitud, longitud, imagen, "descripcion");
-                                lugar.setPosicionFirebaseFav(lugarFirebaseFav);
+                                Object obj = snapshot1.getValue();
+                                String nombre = (String) ((HashMap) obj).get("nombre");
+                                String imagen = (String) ((HashMap) obj).get("imagen");
+                                String descripcion = (String) ((HashMap) obj).get("descripcion");
+                                double latitud = (double) ((HashMap) obj).get("latitud");
+                                double longitud = (double) ((HashMap) obj).get("longitud");
+                                int posicionFirebase = ((Long) ((HashMap) obj).get("posicionFirebaseFav")).intValue();
+                                Lugar lugar = new Lugar(nombre, latitud, longitud, imagen, descripcion);
+                                lugar.setPosicionFirebaseFav(posicionFirebase);
                                 lugaresFavoritos.addLugar(lugar);
                             }
                         }

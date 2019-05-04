@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.andres.tourismcities.modelos.Lugar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,8 +45,8 @@ public class LugarActivity extends AppCompatActivity implements OnMapReadyCallba
         mapFragment.getMapAsync(this);
 
         tv.setText(lugar.getNombre());
-        iv.setImageResource(getResources().getIdentifier("@drawable/" + lugar.getImagen().substring(0, lugar.getImagen().length() - 4), null, getPackageName()));
-
+        //iv.setImageResource(getResources().getIdentifier("@drawable/" + lugar.getImagen().substring(0, lugar.getImagen().length() - 4), null, getPackageName()));
+        Glide.with(this).load(lugar.getImagen()).into(iv);
     }
 
     @Override
