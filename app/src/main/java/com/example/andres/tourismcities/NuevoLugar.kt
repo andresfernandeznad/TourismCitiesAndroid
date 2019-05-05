@@ -33,8 +33,8 @@ class NuevoLugar : AppCompatActivity() {
                 lugar = Lugar(nombre!!.text.toString(), locationNetwork!!.latitude, locationNetwork!!.longitude, imagenUrl, "desc")
             }
             if (lugar != null) addLugarToFB(lugar!!)
-            Toast.makeText(this, locationGPS.toString(), Toast.LENGTH_LONG).show()
-            Toast.makeText(this, locationNetwork.toString(), Toast.LENGTH_LONG).show()
+            PostLogin.lugares.add(lugar)
+            PostLogin.adapter.notifyDataSetChanged()
             super.finish()
         }
     }

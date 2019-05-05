@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".PostLogin"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PostLogin"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -36,21 +39,27 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".LugarActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FavsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SliderLoginActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".LugarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FavsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SliderLoginActivity"
+            android:screenOrientation="portrait" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".ProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NuevoLugar"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NuevoLugar"
+            android:screenOrientation="portrait" />
+        <activity android:name=".PostLoginAdmin"></activity>
     </application>
 
 </manifest>

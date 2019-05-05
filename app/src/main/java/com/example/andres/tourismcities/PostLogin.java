@@ -55,12 +55,12 @@ import java.util.List;
 public class PostLogin extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    private AdaptadorLugar adapter;
+    protected static AdaptadorLugar adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private FloatingActionButton floatingActionButton;
 
-    private static List<Lugar> lugares = new ArrayList<Lugar>();
+    protected static List<Lugar> lugares = new ArrayList<Lugar>();
 
     protected static Usuario usuario = null;
 
@@ -111,6 +111,7 @@ public class PostLogin extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
         if (usuario != null) Toast.makeText(this, "¡Bienvenido/a " + usuario.getNombre() + "!" , Toast.LENGTH_SHORT).show();
 
