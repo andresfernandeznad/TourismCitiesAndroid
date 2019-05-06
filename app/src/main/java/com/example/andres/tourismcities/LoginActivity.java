@@ -1,6 +1,10 @@
 package com.example.andres.tourismcities;
 
+import android.animation.ObjectAnimator;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -8,8 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -58,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
     private RequestQueue queue;
 
     private FirebaseAnalytics firebaseAnalytics;
+    private ProgressBar progressBar;
+    private ObjectAnimator animator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +76,15 @@ public class LoginActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable(FirebaseAnalytics.Param.START_DATE, new Date());
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
-
+        progressBar = findViewById(R.id.progress);
+        progressBar.setVisibility(View.INVISIBLE);
+        animator = ObjectAnimator.ofInt(progressBar, "progress", 0, 100);
         // fillFirebaseDB();
 
         //Para evitar lugares repetidos
         lugares.clear();
 
         leerFromFirebase();
-        // Añadir forma de coger todo desde firebase
-        //setImagenUrl();
         queue = Volley.newRequestQueue(this);
         btnLogin = findViewById(R.id.loginButton);
         btnRegister = findViewById(R.id.registerButton);
@@ -90,15 +98,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String usr = nomUsu.getText().toString().trim();
                 String psw = contra.getText().toString().trim();
-
-
-
                 if (usr.isEmpty() || psw.isEmpty()) {
                     Snackbar.make(view, R.string.login_error_login_vacia, Snackbar.LENGTH_LONG).show();
                 } else {
                     loginWithFirebase(usr, psw);
                 }
-
             }
         });
 
@@ -108,37 +112,11 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 intent.putExtra("usu", nomUsu.getText().toString());
                 startActivity(intent);
-                /*Intent intent = new Intent(getApplicationContext(), SliderLoginActivity.class);
-                startActivity(intent);*/
-            }
-        });
-    }
-
-    private void setImagenUrl() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("downloadsUrl");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                JsonParser parser = new JsonParser();
-                int contador = 0;
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    String downloadUrl = dataSnapshot1.getValue().toString();
-                    lugaresDownloadUrl.add(downloadUrl);
-                    contador++;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
     private void loginWithFirebase(String usr, String clv) {
-
         // Logueamos utilizando Firebase
         String usuario = nomUsu.getText().toString().trim() ;
         String clave   = contra.getText().toString().trim() ;
@@ -147,7 +125,9 @@ public class LoginActivity extends AppCompatActivity {
 
             // Obtenemos instancia de Firebase (Authenticate)
             final FirebaseAuth mAuth = FirebaseAuth.getInstance() ;
-
+//            progressDialog.show();
+            progressBar.setVisibility(View.VISIBLE);
+           // mostrarProgress();
             // Loguearnos con Firebase utilizando el correo y la contraseña
             mAuth.signInWithEmailAndPassword(usuario, clave)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -170,7 +150,9 @@ public class LoginActivity extends AppCompatActivity {
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                                 if (dataSnapshot.exists()) {
-
+//                                                    progressDialog.dismiss();
+                                                    //animator.cancel();
+                                                    progressBar.setVisibility(View.INVISIBLE);
                                                     // Rescatamos la información devuelta por Firebase
                                                     Usuario usuario = dataSnapshot.getValue(Usuario.class) ;
                                                     Intent intent = null;
@@ -192,18 +174,21 @@ public class LoginActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Toast.makeText(LoginActivity.this, "El usuario o la contraseña son erróneos", Toast.LENGTH_LONG).show();
+
                                             }
                                         });
                             }
+                            if (!task.isSuccessful()) {
+                                //animator.cancel();
+                                progressBar.setVisibility(View.INVISIBLE);
+//                                progressDialog.dismiss();
+                                Toast.makeText(LoginActivity.this, "El usuario o la contraseña son erróneos", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }) ;
-
-
         } else {
             Toast.makeText(LoginActivity.this, "El usuario y/o la contraseña no pueden estar vacíos", Toast.LENGTH_LONG).show();
         }
-
     }
 
     private void fillFirebaseDB() {
@@ -248,29 +233,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private Lugar getDownloadUrl(final Lugar lugar) {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageRef = firebaseStorage.getReference().child("lugar/" + lugar.getImagen());
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                anyadirUrlBaseDeDatos(uri, lugar.getNombre());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-        return lugar;
-    }
-
-    private void anyadirUrlBaseDeDatos(Uri uri, String nombreImg) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("downloadsUrl");
-        myRef.child(nombreImg).setValue(uri.toString());
     }
 
     @Override

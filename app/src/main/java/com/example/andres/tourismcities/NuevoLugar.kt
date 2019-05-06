@@ -12,10 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import com.example.andres.tourismcities.modelos.Lugar
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,18 +23,7 @@ import java.io.ByteArrayOutputStream
 
 class NuevoLugar : AppCompatActivity() {
 
-    private var handler = Handler()
-    private var runnable = Runnable {
-        kotlin.run {
-            if (locationNetwork != null) {
-                lugar = Lugar(nombre!!.text.toString(), locationNetwork!!.latitude, locationNetwork!!.longitude, imagenUrl, "desc")
-            }
-            if (lugar != null) addLugarToFB(lugar!!)
-            PostLogin.lugares.add(lugar)
-            PostLogin.adapter.notifyDataSetChanged()
-            super.finish()
-        }
-    }
+    private var progressBar: ProgressBar? = null
     private var lugar: Lugar? = null
     private var imagenUrl = ""
     private var cancelarBoton: Button? = null
@@ -55,6 +41,8 @@ class NuevoLugar : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nuevo_lugar)
         val intent = intent
+        progressBar = findViewById(R.id.progress)
+        progressBar!!.visibility = View.INVISIBLE
         imageView = findViewById(R.id.imageView2)
         var imageView2 = imageView
         nombre = findViewById(R.id.editText)
@@ -68,17 +56,9 @@ class NuevoLugar : AppCompatActivity() {
             super.finish()
         }
         anyadirBoton?.setOnClickListener {
-            subirAFirebase(imagen)
             getLocation()
-            handler.postDelayed(runnable, 2000)
-            // todo Crear objeto lugar y añadirlo al recyclerview principal
-//            if (locationNetwork != null) {
-//                lugar = Lugar(nombre!!.text.toString(), locationNetwork!!.latitude, locationNetwork!!.longitude, imagenUrl, "desc")
-//            }
-//            if (lugar != null) addLugarToFB(lugar!!)
-//            Toast.makeText(this, locationGPS.toString(), Toast.LENGTH_LONG).show()
-//            Toast.makeText(this, locationNetwork.toString(), Toast.LENGTH_LONG).show()
-//            super.finish()
+            progressBar!!.visibility = View.VISIBLE
+            subirAFirebase(imagen)
         }
         getLocation()
     }
@@ -94,12 +74,19 @@ class NuevoLugar : AppCompatActivity() {
         var storageReference = firebaseStorage.reference.child("lugar/${nombre?.text.toString()}.jpg")
 
         var byteArrayOutputStream = ByteArrayOutputStream()
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         var datas = byteArrayOutputStream.toByteArray()
         var uploadTask = storageReference.putBytes(datas).addOnSuccessListener {
+            progressBar!!.visibility = View.INVISIBLE
             imagenUrl = it.metadata!!.downloadUrl.toString()
+            if (locationNetwork != null) {
+                lugar = Lugar(nombre!!.text.toString(), locationNetwork!!.latitude, locationNetwork!!.longitude, imagenUrl, "desc")
+            }
+            if (lugar != null) addLugarToFB(lugar!!)
+            PostLogin.lugares.add(lugar)
+            PostLogin.adapter.notifyDataSetChanged()
+            super.finish()
         }
-        // todo Conseguir poner url en el objeto de firebase
     }
 
     @SuppressLint("MissingPermission")
