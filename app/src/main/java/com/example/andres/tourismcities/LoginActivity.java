@@ -71,12 +71,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
         bundle.putSerializable(FirebaseAnalytics.Param.START_DATE, new Date());
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
-        progressBar = findViewById(R.id.progress);
+        progressBar = findViewById(R.id.progress2);
         progressBar.setVisibility(View.INVISIBLE);
         animator = ObjectAnimator.ofInt(progressBar, "progress", 0, 100);
         // fillFirebaseDB();

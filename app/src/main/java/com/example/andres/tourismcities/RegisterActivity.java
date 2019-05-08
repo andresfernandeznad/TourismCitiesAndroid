@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.andres.tourismcities.modelos.Usuario;
@@ -25,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nombre, apellidos, usuario, email, pass, passConf;
 
     private Button registerBtn;
-
+    private ProgressBar progressBar;
     private FirebaseAuth mAuth;
     private FirebaseDatabase db;
 
@@ -42,6 +43,9 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.correoRegistro);
         pass = findViewById(R.id.passwordRegistro);
         passConf = findViewById(R.id.passwordRegistroConf);
+        progressBar = findViewById(R.id.progress2);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        progressBar.setVisibility(View.INVISIBLE);
 
         email.setText(bund.getString("usu"));
 
@@ -103,7 +107,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 if (enviar) {
-                    Toast.makeText(getApplicationContext(), "Te estás registrando", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.VISIBLE);
+                    //Toast.makeText(getApplicationContext(), "Te estás registrando", Toast.LENGTH_SHORT).show();
                     String usuario = email.getText().toString().trim();
                     String clave = pass.getText().toString().trim();
                     //Si se puede enviar el registro hacemos lo siguiente
@@ -134,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 //Guardamos la información en la BBDD de Firebase asociados al UID.
                                 ref.child(uid).setValue(miUsuario);
-
+                                progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getApplicationContext(), "Se ha creado con éxito", Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -143,6 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 startActivity(intent);
                             } else {
+                                progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getApplicationContext(), "Error en el registro", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -150,5 +156,11 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }

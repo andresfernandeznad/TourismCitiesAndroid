@@ -13,22 +13,6 @@
     android:background="@color/backgroundColor"
     tools:context=".LoginActivity">
 
-    <ProgressBar
-        android:id="@+id/progress"
-        android:indeterminateTint="@android:color/holo_blue_dark"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="250dp"
@@ -51,14 +35,16 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
+        android:background="#333333"
+        android:drawableLeft="@drawable/ic_action_email"
         android:ems="10"
         android:hint="Correo electrónico"
-        android:textColorHint="@android:color/white"
-        android:backgroundTint="@android:color/white"
         android:inputType="textEmailAddress"
         android:textColor="@android:color/white"
+        android:textColorHint="#9C9C9C"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -73,9 +59,10 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="@string/login_label_password"
-        android:textColorHint="@android:color/white"
-        android:backgroundTint="@android:color/white"
+        android:textColorHint="#9C9C9C"
+        android:background="#333333"
         android:inputType="textPassword"
+        android:drawableLeft="@drawable/ic_action_pass"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -92,6 +79,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/login_button_login"
+        android:background="#222222"
+        android:textColor="#afafaf"
+        android:radius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
@@ -107,12 +97,31 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/login_button_register"
+        android:background="#222222"
+        android:textColor="#afafaf"
+        android:radius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ProgressBar
+        android:id="@+id/progress2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:indeterminateTint="@android:color/holo_blue_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--Boton signin de Google-->
 
