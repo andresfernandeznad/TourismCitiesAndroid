@@ -113,11 +113,9 @@ public class PostLogin extends AppCompatActivity {
         });
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-        if (usuario != null) Toast.makeText(this, "¡Bienvenido/a " + usuario.getNombre() + "!" , Toast.LENGTH_SHORT).show();
-
         Toast.makeText(this, "Mantén presionado en el lugar que quieras para añadirlo a favoritos", Toast.LENGTH_SHORT).show();
 
-        Snackbar.make(findViewById(R.id.recyclerLugares), "¡Bienvenido/a " + usuario.getNombre() + "!", Snackbar.LENGTH_LONG).show();
+        if (usuario != null) Snackbar.make(findViewById(R.id.recyclerLugares), "¡Bienvenido/a " + usuario.getNombre() + "!", Snackbar.LENGTH_LONG).show();
 
         if (usuario != null) downloadFavsFromFirebase(usuario.getIdUsuario());
 

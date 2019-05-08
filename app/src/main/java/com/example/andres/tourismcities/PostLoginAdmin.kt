@@ -38,7 +38,6 @@ class PostLoginAdmin : AppCompatActivity() {
         layoutManager = LinearLayoutManager(this)
         recyclerView!!.setLayoutManager(layoutManager)
         adapter = AdaptadorLugar(R.layout.lugar, this, lugares, AdaptadorLugar.OnItemClickListener { lugar, position ->
-            Toast.makeText(this, "test", Toast.LENGTH_LONG).show()
         })
         recyclerView!!.setAdapter(adapter)
         registerForContextMenu(recyclerView)

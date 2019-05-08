@@ -50,6 +50,8 @@ public class ProfileActivity extends AppCompatActivity {
         textViewEmail = findViewById(R.id.emailUsuario);
         if ( uriRes != null ) {
             Glide.with(getApplicationContext()).load(uriRes).dontTransform().into(imageView);
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
         }
         getSupportActionBar().setSubtitle("Perfil");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -115,16 +117,20 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("usuario/" + usuario.getIdUsuario());
+        usuario.setNombre(textViewUsuario.getText().toString());
+        usuario.setApellidos(textViewEmail.getText().toString());
+        PostLogin.usuario.setNombre(textViewUsuario.getText().toString());
+        PostLogin.usuario.setApellidos(textViewEmail.getText().toString());
+        myRef.child("nombre").setValue(textViewUsuario.getText().toString());
+        myRef.child("apellidos").setValue(textViewEmail.getText().toString());
         onBackPressed();
         return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("usuario/" + usuario.getIdUsuario());
-        myRef.child("nombre").setValue(textViewUsuario.getText().toString());
-        myRef.child("apellidos").setValue(textViewEmail.getText().toString());
         super.onBackPressed();
     }
 }

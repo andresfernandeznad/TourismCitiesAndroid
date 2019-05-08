@@ -85,7 +85,7 @@ public class AdaptadorLugar extends RecyclerView.Adapter<AdaptadorLugar.LugarHol
 
             // String nombreImg = lugar.getImagen().substring(0, lugar.getImagen().length() - 4);
             //imageView.setImageResource(contexto.getResources().getIdentifier("@drawable/" + nombreImg, null, contexto.getPackageName()));
-            Glide.with(contexto).load(lugar.getImagen()).into(imageView);
+            Glide.with(contexto.getApplicationContext()).load(lugar.getImagen()).into(imageView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

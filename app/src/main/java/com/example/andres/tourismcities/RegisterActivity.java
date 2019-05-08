@@ -146,6 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 intent.putExtra("email", email.getText().toString());
 
+                                finish();
                                 startActivity(intent);
                             } else {
                                 progressBar.setVisibility(View.INVISIBLE);
@@ -162,5 +163,12 @@ public class RegisterActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        super.onBackPressed();
     }
 }

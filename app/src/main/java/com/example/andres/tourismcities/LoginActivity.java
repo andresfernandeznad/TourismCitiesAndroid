@@ -111,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 intent.putExtra("usu", nomUsu.getText().toString());
+                finish();
                 startActivity(intent);
             }
         });
@@ -213,8 +214,6 @@ public class LoginActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                JsonParser parser = new JsonParser();
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Object obj = ds.getValue();
