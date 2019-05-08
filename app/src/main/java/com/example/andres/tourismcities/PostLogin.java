@@ -131,32 +131,6 @@ public class PostLogin extends AppCompatActivity {
             Bundle extras = data.getExtras();
             intent.putExtra("lugarBundle", extras);
             startActivity(intent);
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date());
-
-            // Creamos una referencia a la carpeta y el nombre de la imagen donde se guardara
-            //todo Añadir la url de los lugares ponerle el nombre sacándolo de la ubicación de alguna forma
-            StorageReference mountainImagesRef = storage.getReference().child("lugar/"+timeStamp+".jpg");
-//Pasamos la imagen a un array de byte
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] datas = baos.toByteArray();
-
-// Empezamos con la subida a Firebase
-            UploadTask uploadTask = mountainImagesRef.putBytes(datas);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(getBaseContext(),"Hubo un error",Toast.LENGTH_LONG);
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getBaseContext(),"Subida con exito",Toast.LENGTH_LONG);
-
-                }
-            });
         }
     }
 

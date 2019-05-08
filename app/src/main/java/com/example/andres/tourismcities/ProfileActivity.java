@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -27,7 +30,7 @@ import java.io.ByteArrayOutputStream;
 public class ProfileActivity extends AppCompatActivity {
 
     private static Usuario usuario;
-    private TextView textViewUsuario, textViewEmail;
+    private EditText textViewUsuario, textViewEmail;
     private ImageView imageView;
     protected static Uri uriRes;
     private ProgressBar progressBar;
@@ -50,8 +53,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
         getSupportActionBar().setSubtitle("Perfil");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        textViewUsuario.setText(usuario.getNombreCompleto());
-        textViewEmail.setText(usuario.getEmail());
+        textViewUsuario.setText(usuario.getNombre());
+        textViewEmail.setText(usuario.getApellidos());
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,5 +117,14 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("usuario/" + usuario.getIdUsuario());
+        myRef.child("nombre").setValue(textViewUsuario.getText().toString());
+        myRef.child("apellidos").setValue(textViewEmail.getText().toString());
+        super.onBackPressed();
     }
 }
