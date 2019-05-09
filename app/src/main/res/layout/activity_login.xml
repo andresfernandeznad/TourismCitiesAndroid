@@ -36,7 +36,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="60dp"
-        android:background="#333345"
+        android:background="#333333"
         android:drawableLeft="@drawable/ic_action_email"
         android:ems="10"
         android:hint="Correo electrónico"
