@@ -98,8 +98,8 @@ public class RegisterActivity extends AppCompatActivity {
                     enviar = false;
                 }
 
-                if (pass.getText().toString().length() < 5 || passConf.getText().toString().length() < 5) {
-                    Toast.makeText(getApplicationContext(), "La longitud mínima de contraseña es 5", Toast.LENGTH_SHORT).show();
+                if (pass.getText().toString().length() < 6 || passConf.getText().toString().length() < 6) {
+                    Toast.makeText(getApplicationContext(), "La longitud mínima de contraseña es 6", Toast.LENGTH_SHORT).show();
                     enviar = false;
                 } else if (!pass.getText().toString().equals(passConf.getText().toString())) {
                     Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
