@@ -81,10 +81,16 @@ class NuevoLugar : AppCompatActivity() {
             imagenUrl = it.metadata!!.downloadUrl.toString()
             if (locationNetwork != null) {
                 lugar = Lugar(nombre!!.text.toString(), locationNetwork!!.latitude, locationNetwork!!.longitude, imagenUrl, "desc")
+            } else if (locationGPS != null) {
+                lugar = Lugar(nombre!!.text.toString(), locationGPS!!.latitude, locationGPS!!.longitude, imagenUrl, "desc")
             }
-            if (lugar != null) addLugarToFB(lugar!!)
-            PostLogin.lugares.add(lugar)
-            PostLogin.adapter.notifyDataSetChanged()
+            if (lugar != null) {
+                addLugarToFB(lugar!!)
+                PostLogin.lugares.add(lugar)
+                PostLogin.adapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(applicationContext, "Error al obtener la ubicación", Toast.LENGTH_SHORT).show()
+            }
             super.finish()
         }
     }
@@ -104,15 +110,15 @@ class NuevoLugar : AppCompatActivity() {
                     }
 
                     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                     override fun onProviderEnabled(p0: String?) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                     override fun onProviderDisabled(p0: String?) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                 })

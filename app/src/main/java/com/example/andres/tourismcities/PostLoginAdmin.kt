@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ContextMenu
@@ -56,11 +57,21 @@ class PostLoginAdmin : AppCompatActivity() {
     }
 
     private fun borrarLugar(lugar: Lugar) {
-        val database = FirebaseDatabase.getInstance()
-        val ref = database.getReference("lugar/" + lugar.nombre)
-        lugares.removeAt(adapter!!.getPosicion())
-        ref.removeValue()
-        adapter!!.notifyItemRemoved(adapter!!.getPosicion())
+        val builder = AlertDialog.Builder(this@PostLoginAdmin)
+        builder.setTitle("Borrar lugar")
+        builder.setMessage("¿Estás seguro de querer borrar " + lugar.nombre)
+        builder.setPositiveButton("Sí"){dialogInterface, i ->
+            val database = FirebaseDatabase.getInstance()
+            val ref = database.getReference("lugar/" + lugar.nombre)
+            lugares.removeAt(adapter!!.getPosicion())
+            ref.removeValue()
+            adapter!!.notifyItemRemoved(adapter!!.getPosicion())
+            Toast.makeText(this, "Lugar eliminado", Toast.LENGTH_SHORT).show()
+        }
+        builder.setNegativeButton("Cancelar"){dialogInterface, i ->
+            Toast.makeText(this, "Borrar lugar cancelado", Toast.LENGTH_SHORT).show()
+        }
+        builder.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

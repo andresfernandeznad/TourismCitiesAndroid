@@ -1,6 +1,8 @@
 package com.example.andres.tourismcities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -85,11 +87,26 @@ public class FavsActivity extends AppCompatActivity {
     }
 
     private void borrarFromFirebase(int posicion, Lugar lugar) {
-        Toast.makeText(getApplicationContext(), "Se borra " + lugar.getNombre(), Toast.LENGTH_SHORT).show();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario() + "/lugaresFavoritos/" + posicion);
-        lugaresFavoritos.getLugaresFavoritos().remove(adapter.getPosicion());
-        ref.removeValue();
-        adapter.notifyItemRemoved(adapter.getPosicion());
+        final DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario() + "/lugaresFavoritos/" + posicion);
+        AlertDialog alertDialog = new AlertDialog.Builder(FavsActivity.this).create();
+        alertDialog.setTitle("Borrar de favoritos");
+        alertDialog.setMessage("¿Estás seguro de borrar " + lugar.getNombre() + " de favoritos?");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getApplicationContext(), "Se borra de favoritos", Toast.LENGTH_SHORT).show();
+                lugaresFavoritos.getLugaresFavoritos().remove(adapter.getPosicion());
+                ref.removeValue();
+                adapter.notifyItemRemoved(adapter.getPosicion());
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getApplicationContext(), "Borrar lugar favorito cancelado", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialog.show();
     }
 }
