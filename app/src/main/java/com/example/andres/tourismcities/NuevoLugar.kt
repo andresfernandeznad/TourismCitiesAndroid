@@ -30,7 +30,6 @@ class NuevoLugar : AppCompatActivity() {
     private var anyadirBoton: Button? = null
     private var imageView: ImageView? = null
     private var nombre: EditText? = null
-    //private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationManager: LocationManager
     private var hasGPS = false
     private var hasNetwork = false
@@ -85,9 +84,13 @@ class NuevoLugar : AppCompatActivity() {
                 lugar = Lugar(nombre!!.text.toString(), locationGPS!!.latitude, locationGPS!!.longitude, imagenUrl, "desc")
             }
             if (lugar != null) {
-                addLugarToFB(lugar!!)
-                PostLogin.lugares.add(lugar)
-                PostLogin.adapter.notifyDataSetChanged()
+                if (!PostLogin.lugares.contains(lugar)) {
+                    addLugarToFB(lugar!!)
+                    PostLogin.lugares.add(lugar)
+                    PostLogin.adapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this, "${lugar!!.nombre} no se ha podido añadir, ya existe en la aplicación.", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(applicationContext, "Error al obtener la ubicación", Toast.LENGTH_SHORT).show()
             }

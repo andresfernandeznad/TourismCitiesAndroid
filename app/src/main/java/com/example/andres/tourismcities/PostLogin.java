@@ -1,12 +1,14 @@
 package com.example.andres.tourismcities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,8 +68,6 @@ public class PostLogin extends AppCompatActivity {
 
     private static Favoritos lugaresFavoritos = null;
 
-    //private GoogleApiClient googleApiClient;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +77,6 @@ public class PostLogin extends AppCompatActivity {
 
         pedirPermisos();
         usuario = (Usuario) intent.getSerializableExtra("usuario");
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        // ProfileActivity.getDownloadUrlUser(storage.getReference().child("users/"+usuario.getIdUsuario()));
-
 
         lugares = (List<Lugar>) intent.getSerializableExtra("lugares");
 
@@ -143,11 +139,9 @@ public class PostLogin extends AppCompatActivity {
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            //Toast.makeText(getApplicationContext(), "Todos los permisos garantizados.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Todos los permisos garantizados.", Toast.LENGTH_SHORT).show();
                         }
-                        // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
 
                         }
@@ -170,9 +164,23 @@ public class PostLogin extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        lugares.clear();
-        FirebaseAuth.getInstance().signOut();
-        super.onBackPressed();
+        AlertDialog alertDialog = new AlertDialog.Builder(PostLogin.this).create();
+        alertDialog.setTitle("Cerrar sesión");
+        alertDialog.setMessage("¿Estás seguro de cerrar sesión?");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                lugares.clear();
+                FirebaseAuth.getInstance().signOut();
+                PostLogin.super.onBackPressed();
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        alertDialog.show();
     }
 
     @Override
@@ -192,7 +200,6 @@ public class PostLogin extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         Lugar seAnyade = lugares.get(adapter.getPosicion());
         addFavoritos(seAnyade);
-        //Toast.makeText(this, "Se añade a favoritos " + lugaresFavoritos.getLugaresFavoritos().get(adapter.getPosicion() - 1).getNombre(), Toast.LENGTH_LONG).show() ;
         return super.onContextItemSelected(item);
     }
 
@@ -213,10 +220,8 @@ public class PostLogin extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.perfilmenu:
-                // todo Que se abre actividad en la que se pueda ver mi perfil y configuración sobre el mismo
                 intent = new Intent(getApplicationContext(), ProfileActivity.class);
                 intent.putExtra("usuario", usuario);
-                //Toast.makeText(getApplicationContext(), "Se abre mi perfil", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
                 break;
 
@@ -284,10 +289,14 @@ public class PostLogin extends AppCompatActivity {
     protected void addFavoritos(Lugar seAnyade) {
         Toast.makeText(getApplicationContext(), "Se añade a favoritos " + seAnyade.getNombre(), Toast.LENGTH_SHORT).show();
         seAnyade.setPosicionFirebaseFav(lugaresFavoritos.getLugaresFavoritos().size());
-        lugaresFavoritos.addLugar(seAnyade);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario());
-        ref.setValue(lugaresFavoritos);
+        if (!lugaresFavoritos.getLugaresFavoritos().contains(seAnyade)) {
+            lugaresFavoritos.addLugar(seAnyade);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference("favoritos/" + usuario.getIdUsuario());
+            ref.setValue(lugaresFavoritos);
+        } else {
+            Toast.makeText(this, "No se ha añadido a favoritos, ese lugar ya existe en favoritos.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

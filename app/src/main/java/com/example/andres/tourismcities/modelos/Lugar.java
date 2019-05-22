@@ -1,9 +1,13 @@
 package com.example.andres.tourismcities.modelos;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Lugar implements Serializable {
 
@@ -86,5 +90,23 @@ public class Lugar implements Serializable {
 
     public void setPosicionFirebaseFav(int posicionFirebaseFav) {
         this.posicionFirebaseFav = posicionFirebaseFav;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lugar lugar = (Lugar) o;
+        return Double.compare(lugar.latitud, latitud) == 0 &&
+                Double.compare(lugar.longitud, longitud) == 0 &&
+                Objects.equals(nombre, lugar.nombre);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(nombre, latitud, longitud);
     }
 }
