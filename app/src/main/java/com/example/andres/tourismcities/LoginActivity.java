@@ -126,9 +126,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Obtenemos instancia de Firebase (Authenticate)
             final FirebaseAuth mAuth = FirebaseAuth.getInstance() ;
-//            progressDialog.show();
             progressBar.setVisibility(View.VISIBLE);
-           // mostrarProgress();
             // Loguearnos con Firebase utilizando el correo y la contraseña
             mAuth.signInWithEmailAndPassword(usuario, clave)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -136,11 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if (task.isSuccessful()) {
-
                                 // Recuperamos la información de la base de datos
                                 // de Firebase
                                 FirebaseDatabase db = FirebaseDatabase.getInstance() ;
-
                                 // Creamos una referencia al documento USUARIOS
                                 DatabaseReference ref = db.getReference("usuario") ;
 
