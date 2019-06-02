@@ -1,4 +1,6 @@
 # TourismCities
+El proyecto consta de dos partes en este repositorio está el código de la parte android y la parte web está en el siguiente repositorio
+
 Esta es una aplicación para almacenar información de tus lugares favoritos para hacer turismo, respecto a unos lugares añadidos por el admin u otros usuarios de la aplicación
 
  Lo primero es una pantalla donde podemos loguearnos mediante nuestro email y contraseña o acceder a la pantalla de registro de la aplicación
