@@ -2,7 +2,9 @@
 El proyecto consta de dos partes en este repositorio está el código de la parte android y la parte web está en el siguiente repositorio
 
 [BI Web](https://github.com/andresfernandeznad/TourismCitiesAppBussiness/)
+
 [APK](apk/)
+
 La url donde está alojada esta aplicación web es 
 https://tourism-cities.firebaseapp.com/
 
