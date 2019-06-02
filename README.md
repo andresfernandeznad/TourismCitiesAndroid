@@ -17,9 +17,11 @@ Tras logearnos tendremos a nuestra disposición unos gráficos con información 
 
 También podremos descargar la info de estos gráficos en formato excel o pdf
 Si descargamos en pdf tendremos algo tal que así
+
 <img src="https://github.com/andresfernandeznad/TourismCitiesAppBussiness/blob/master/public/readmeimgs/pdf.PNG" width="250px">
 
 Y si lo descargamos en formato excel tendremos algo tal que así
+
 <img src="https://github.com/andresfernandeznad/TourismCitiesAppBussiness/blob/master/public/readmeimgs/excel.PNG" width="250px">
 
 Y esta sería la parte de BI, ahora pasamos a la aplicación android como tal.
