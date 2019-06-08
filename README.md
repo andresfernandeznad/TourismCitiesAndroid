@@ -10,21 +10,21 @@ https://tourism-cities.firebaseapp.com/
 
 En ella podremos ver una pantalla de login para el manager
 
-<img src="https://github.com/andresfernandeznad/TourismCitiesAppBussiness/blob/master/public/readmeimgs/login.PNG" width="250px">
+<img src="readmeIMG/loginweb.PNG" width="250px">
 
 Tras logearnos tendremos a nuestra disposición unos gráficos con información del rendimiento que está teniendo nuestra aplicación
 
-<img src="https://github.com/andresfernandeznad/TourismCitiesAppBussiness/blob/master/public/readmeimgs/graficos.PNG" width="250px">
-<img src="https://github.com/andresfernandeznad/TourismCitiesAppBussiness/blob/master/public/readmeimgs/graficos2.PNG" width="250px">
+<img src="readmeIMG/graficos.PNG" width="250px">
+<img src="readmeIMG/graficos2.PNG" width="250px">
 
 También podremos descargar la info de estos gráficos en formato excel o pdf
 Si descargamos en pdf tendremos algo tal que así
 
-<img src="https://github.com/andresfernandeznad/TourismCitiesAppBussiness/blob/master/public/readmeimgs/pdf.PNG" width="250px">
+<img src="readmeIMG/pdf.PNG" width="250px">
 
 Y si lo descargamos en formato excel tendremos algo tal que así
 
-<img src="https://github.com/andresfernandeznad/TourismCitiesAppBussiness/blob/master/public/readmeimgs/excel.PNG" width="250px">
+<img src="readmeIMG/excel.PNG" width="250px">
 
 Y esta sería la parte de BI, ahora pasamos a la aplicación android como tal.
 
