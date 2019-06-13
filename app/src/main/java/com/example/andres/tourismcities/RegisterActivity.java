@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText nombre, apellidos, usuario, email, pass, passConf;
+    private EditText nombre, apellidos, email, pass, passConf;
 
     private Button registerBtn;
     private ProgressBar progressBar;
@@ -39,7 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         nombre = findViewById(R.id.nombreRegistro);
         apellidos = findViewById(R.id.apellidosRegistro);
-        usuario = findViewById(R.id.usuarioRegistro);
         email = findViewById(R.id.correoRegistro);
         pass = findViewById(R.id.passwordRegistro);
         passConf = findViewById(R.id.passwordRegistroConf);
@@ -56,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
                 for (int i = start; i < end; i++) {
-                    if (!Character.isLetter(source.charAt(i))) {
+                    if (!Character.isLetter(source.charAt(i)) && source.charAt(i) != ' ') {
                         Toast.makeText(RegisterActivity.this, "Error alfabético", Toast.LENGTH_SHORT).show();
                         //Cuando encuentra un caracter que no sea una letra
                         return "";
@@ -84,7 +83,6 @@ public class RegisterActivity extends AppCompatActivity {
         };
 
         nombre.setFilters(new InputFilter[] {alfabeticos});
-        usuario.setFilters(new InputFilter[] {alfanumericos, new InputFilter.LengthFilter(16)});
         apellidos.setFilters(new InputFilter[] {alfabeticos});
         pass.setFilters(new InputFilter[] {new InputFilter.LengthFilter(15)});
         passConf.setFilters(new InputFilter[] {new InputFilter.LengthFilter(15)});
@@ -93,10 +91,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Boolean enviar = true;
-                if (usuario.getText().toString().length() < 5) {
-                    Toast.makeText(getApplicationContext(), "La longitud mínima de usuario es 5", Toast.LENGTH_SHORT).show();
-                    enviar = false;
-                }
 
                 if (pass.getText().toString().length() < 6 || passConf.getText().toString().length() < 6) {
                     Toast.makeText(getApplicationContext(), "La longitud mínima de contraseña es 6", Toast.LENGTH_SHORT).show();
