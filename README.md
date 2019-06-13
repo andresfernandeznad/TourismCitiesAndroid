@@ -110,14 +110,19 @@ Cerramos sesión y volvemos al login
 Ahora el admin también puede acceder y ver la lista de lugares
 Y aquí el podrá borrar lugares de base de datos si no son correctos o simplemente por antiguedad
 
-<img src="readmeIMG/MensajeConfBorrarBD.png" width="250px">
-
 Y un mensaje de confirmación
 
 <img src="readmeIMG/borrarBD.png" width="250px">
 
 Eso sí, si un usuario ha añadido un lugar a favoritos y el admin borra ese lugar de base de datos, ese lugar persistirá en 
 favoritos.
-Y podemos cerrar sesión y volvemos al login
+
+<img src="readmeIMG/campoFav.png" width="250px">
+
+Y podremos acceder de todas maneras a la info del lugar
+
+<img src="readmeIMG/lugarCampoPrueba.png" width="250px">
+
+Ahora podemos cerrar sesión, volvemos al login y cerrar la aplicación
 
 <img src="readmeIMG/login.png" width="250px">
