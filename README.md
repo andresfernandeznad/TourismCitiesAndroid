@@ -12,6 +12,9 @@ En ella podremos ver una pantalla de login para el manager
 
 <img src="readmeIMG/loginweb.PNG" width="250px">
 
+Correo - manager@gmail.com
+Contraseña - manager1234
+
 Tras logearnos tendremos a nuestra disposición unos gráficos con información del rendimiento que está teniendo nuestra aplicación
 
 <img src="readmeIMG/graficos.PNG" width="250px">
