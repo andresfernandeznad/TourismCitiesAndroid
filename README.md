@@ -113,6 +113,9 @@ Cerramos sesión y volvemos al login
 Ahora el admin también puede acceder y ver la lista de lugares
 Y aquí el podrá borrar lugares de base de datos si no son correctos o simplemente por antiguedad
 
+Correo - admin@gmail.com 
+Contraseña - admin1234
+
 Y un mensaje de confirmación
 
 <img src="readmeIMG/borrarBD.png" width="250px">
